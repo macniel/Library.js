@@ -1,7 +1,6 @@
 **Library** is a lightweight Wiki Application written entirely in javascript, 
-it runs on a nodejs hosting platform. 
-It fully supports [[http://www.wikicreole.org/|Creole Markup]] to easily 
-compose Rich Text.
+it runs on a nodejs hosting platform. It fully supports 
+http://www.wikicreole.org/ to easily compose Rich Text.
 
 It utilizes Lux UI as Layout Engine and JSON Search for fast unindexed searches.
 
@@ -19,7 +18,9 @@ Library consists of several Modules which defines the behavior of the Applicatio
 ** includes template processing
 * Asychronized File Uploads
 * IntelliSense (currently under development)
-** whenever you type [[ (links), {{ (images) or << (templates) you will get a list of usable Topics or Files which can be pasted into your current WikiText
+** whenever you type [[ (links), {{ (images) or << (templates) 
+   you will get a list of usable Topics or Files which can be 
+   pasted into your current WikiText
 * Fast Search Engine
 ** Article titles and full text search enabled
 * Categorization of articles
