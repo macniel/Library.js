@@ -1,0 +1,118 @@
+var fs = require("fs");
+var wikiProcessor = require("../wiky");
+
+String.prototype.ReplaceAll = function(stringToFind,stringToReplace){
+    var temp = this;
+    var index = temp.indexOf(stringToFind);
+        while(index != -1){
+            temp = temp.replace(stringToFind,stringToReplace);
+            index = temp.indexOf(stringToFind);
+        }
+    return temp;
+}
+
+exports.getToc = function() {
+	return wikiProcessor.getToc();
+}
+
+exports.search = function(query) {
+	var array = { 
+		"directmatch" : {},
+		"indirectmatch" : {}
+		};
+	var i = 0;
+	topics = eval ( '(' + fs.readFileSync("models/Topics.json") + ')' );
+	for ( topic in topics ) {
+		if ( topic.indexOf(query) >= 0 ) {
+			if ( topic == "Not found")
+				continue;
+			array["directmatch"][++i] = topic;
+		} else if ( topics[topic]["content"].indexOf(query) >= 0 ) {
+			if ( topic == "Not found")
+				continue;
+			array["indirectmatch"][++i] = topic;
+		}
+	}
+	return array;
+}
+
+exports.hasTopic = function(topic) {
+	if ( typeof topics[topic] != "undefined" && typeof topics[topic]["content"] != "undefined" ) 
+		return topics[topic]["content"];
+	else
+		return false;
+}
+
+exports.get = function(topic) {
+	topics = fs.readFileSync("models/Topics.json", "utf-8");
+	topics = JSON.parse(topics);
+	console.log("GET Topic " + topic);
+	if ( typeof topic == "string" && topic.indexOf("/") == 0 ) {
+		topic = topic.substr(1).ReplaceAll("%20", " ");
+		if ( typeof topics[topic] != "undefined" ) {
+			return {"meta" : topics[topic]["meta"], "parsed": wikiProcessor.process(topics[topic]["content"]), "unparsed" : topics[topic]["content"]};
+		} else {
+			return {"meta" : topics["Not found"]["meta"], "parsed": wikiProcessor.process(topics["Not found"]["content"]), "unparsed" : topics["Not found"]["content"]};
+		}
+	} else {
+		var ind = {};
+		var i = 0;
+		for ( topic in topics ) {
+			categories = topics[topic]["meta"].split(",");
+			if ( typeof topic == "string" ) {
+				for ( category in categories ) {
+					if ( typeof categories[category] == "string" ) 
+						if ( typeof ind[categories[category]] == "undefined" ) {
+							ind[categories[category]] = {};
+							ind[categories[category]][0] = topic;
+						} else {
+							i = i + 1;
+							ind[categories[category]][i] = topic;
+						}
+						
+				}
+			}
+		}
+		return ind;
+	}
+	return false;
+}
+
+var saveData = function() {
+	console.log("SAVING Topics");
+	var save = {};
+	for ( topic in topics ) {
+		if ( typeof topics[topic] != "string" ) {
+			save[topic] = {
+				"content": topics[topic]["content"],
+				"meta": topics[topic]["meta"]
+			};
+		}
+	}
+	fs.writeFileSync("models/Topics.json", JSON.stringify(save));
+	topics = JSON.parse(fs.readFileSync("models/Topics.json", "utf-8"));
+	
+}
+
+exports.post = function(topic, content, meta) {
+	topics = JSON.parse(fs.readFileSync("models/Topics.json", "utf-8"));
+	topics[topic] = {
+		"content" : content,
+		"meta" : meta
+ 	}
+	console.log("PUT Topic " + topic);
+	saveData();
+	return "OKAY";
+}
+
+exports.del = function(topic) {
+	console.log("DELETE Topic " + topic );
+	topics = JSON.parse(fs.readFileSync("models/Topics.json", "utf-8"));
+	topic = topic.substr(1).replace("%20", " ");
+	if ( typeof topics[topic] != "undefined" ) {
+		delete topics[topic];
+	}
+	fs.writeFileSync("models/Topics.json", JSON.stringify(topics));
+	topics = JSON.parse(fs.readFileSync("models/Topics.json", "utf-8"));
+	return "GONE";
+}

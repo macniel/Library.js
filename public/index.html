@@ -1,0 +1,707 @@
+<!doctype html>
+<html>
+	
+	<style type="text/css">
+
+		body {
+			background-image: url('icons/bookicon.png');
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-position: -210px -180px;
+		}
+	
+		p {
+			font-size: 12pt;
+		}
+		h1, #content h1 {
+			font-size: 18pt;
+			color: black;
+			font-family: 'Segoe UI Light';
+		}
+		h1 img {
+			margin: 4px;
+			margin-right: 8px;
+			margin-bottom: 0;
+		}
+		.toc {
+			padding-left: 16px;
+			padding-right: 250px;
+			border: 1px solid blue;
+			background-color: #efefef;
+			position: fixed;
+			left: 288px;
+			top: 81px;
+			display: none;
+		}
+		#content h1 {
+background: #6db3f2; /* Old browsers */
+background: -moz-linear-gradient(top, #6db3f2 0%, #54a3ee 50%, #3690f0 51%, #1e69de 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6db3f2), color-stop(50%,#54a3ee), color-stop(51%,#3690f0), color-stop(100%,#1e69de)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6db3f2', endColorstr='#1e69de',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); /* W3C */
+			position: fixed;
+			left: 288px;
+			right: 4px;
+			top: 48px;
+			left: 288px;
+			margin-top: 0;
+			height: 34px;
+			font-size: 16pt;
+			padding-left: 10px;
+			font-weight: bold;
+			color: white;
+				font-family: 'Segoe UI';
+		background-color: gray;
+		}
+		.caption > a, #fileuploader h2 {
+			display: inline-block;
+			width: 100%;
+			font-size: 10pt;
+			padding-left: 10px;
+			font-weight: bold;
+			color: white;
+			background-color: gray;
+			text-decoration: none;
+			font-family: 'Segoe UI';
+			background: #6db3f2; /* Old browsers */
+background: -moz-linear-gradient(top, #6db3f2 0%, #54a3ee 50%, #3690f0 51%, #1e69de 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6db3f2), color-stop(50%,#54a3ee), color-stop(51%,#3690f0), color-stop(100%,#1e69de)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6db3f2', endColorstr='#1e69de',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%); /* W3C */
+		}
+		.caption > a {
+			height: 16px;
+			font-size: 9pt;
+		}
+		h2, h3, h4, h5, h6 {
+			border-bottom: 1px solid silver;
+			font-family: 'Calibri';
+		}
+		a {
+			text-decoration: none;
+			color: #0645AD;
+		}
+		div.accordion {
+			padding-left: 20px;
+			width: 100%;
+			display: block;
+		}
+		div.accordion span > a {
+			font-family: 'Segoe UI';
+			color: #0645AD !important;
+			font-weight: bold;
+			font-size: 9pt;
+		}
+		#results, .curtain {
+			position: absolute;
+			left: 4px;
+			width: 280px;
+			top: 48px;
+			bottom: 48px;
+			border: 1px solid silver;
+			overflow: hidden;
+			overflow-y: scroll;
+			font-size: 10pt;
+			background-color: rgba(255, 255, 255, 0.75);
+		}
+		.curtain {
+			background-color: rgba(255,255,255,0.5);
+			overflow: hidden;
+		}
+		#content {
+			position: absolute;
+			top: 82px;
+			left: 288px;
+			bottom: 4px;
+			right: 4px;
+			border: 1px solid silver;
+			overflow: hidden;
+			overflow-y: scroll;
+			padding: 4px;
+			font-family: 'tahoma';
+		}
+		#searchfield {
+			position: absolute;
+			right: 4px;
+			top: 4px;
+			height: 32px;
+		}
+		h1 {
+			position: absolute;
+			top: 0;
+			left: 4px;
+			padding: 0;
+			margin: 0;
+			font-size: 24pt;
+		}
+		pre {
+			font-family: 'console';
+		}
+		#commandbar {
+			position: absolute;
+			left: 4px;
+			bottom: 4px;
+			width: 282px;
+			height: 44px;
+			background: -moz-linear-gradient(top, rgba(192,192,192,1) 0%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(192,192,192,1)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(192,192,192,1) 0%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(192,192,192,1) 0%,rgba(0,0,0,0) 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, rgba(192,192,192,1) 0%,rgba(0,0,0,0) 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5b5b5', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, rgba(192,192,192,1) 0%,rgba(0,0,0,0) 100%); /* W3C */
+			text-align: center;
+		}
+		#commandbar button {
+			padding: 0;
+			margin: 0;
+			width: 20%;
+		}
+		.redlink {
+			color: red;
+		}
+		.editableHeader input, .editableContent textarea, .editableMeta input {
+			margin: 0 auto; 
+			width: 100%; 
+			height: 100% 
+
+		}
+		.editableHeader {
+			display: block;
+			position: absolute;
+			left: 288px;
+			top: 48px;
+			right: 8px;
+			height: 24px;
+			width: auto;
+		}
+		.editableHeader input {
+			font-size: 20px;
+		}
+		.editableContent {
+			position: absolute;
+			display: block;
+			left: 288px;
+			top: 96px;
+			right: 10px;
+			bottom: 8px;
+			width: auto;
+			height: auto;
+			border: 1px solid silver;
+		}
+		.editableContent textarea{
+		}
+		.fileuploader {
+			bottom: 132px !important;
+		}
+		#fileuploader h2 {
+			position: relative;
+			left: 0;
+			top: 0;
+			right: 0;
+			width: auto;
+			display: block;
+			margin: 0;
+		}
+		#fileuploader {
+			display: block;
+			position: absolute;
+			bottom: 4px;
+			right: 4px;
+			left: 288px;
+			height: 128px;
+			border: 1px solid silver;
+			background-color: white;
+		}
+		
+		blockquote {
+ border : 1px solid lightorange;
+ background-color: #fefefe;
+ quotes: "\201C" "\201D";
+	position : relative;
+ }
+ blockquote:before { content: open-quote; }
+ blockquote:after { content: close-quote; }
+ 
+		#fileuploader h2 {
+			color: gray;
+			background: #f3f3f3; /* Old browsers */
+background: -moz-linear-gradient(top, #f3f3f3 1%, #e5e5e5 4%, #d2d2d2 98%, #bdbdbd 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#f3f3f3), color-stop(4%,#e5e5e5), color-stop(98%,#d2d2d2), color-stop(100%,#bdbdbd)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #f3f3f3 1%,#e5e5e5 4%,#d2d2d2 98%,#bdbdbd 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #f3f3f3 1%,#e5e5e5 4%,#d2d2d2 98%,#bdbdbd 100%); /* Opera11.10+ */
+background: -ms-linear-gradient(top, #f3f3f3 1%,#e5e5e5 4%,#d2d2d2 98%,#bdbdbd 100%); /* IE10+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f3f3f3', endColorstr='#bdbdbd',GradientType=0 ); /* IE6-9 */
+background: linear-gradient(top, #f3f3f3 1%,#e5e5e5 4%,#d2d2d2 98%,#bdbdbd 100%); /* W3C */
+}
+		#fileuploader div {
+			margin: 8px;
+		}
+		.editableMeta {
+			position:absolute;
+			display: block;
+			left: 288px;
+			top: 78px;
+			right: 8px;
+			height: 14px;
+			
+		}
+		.editableMeta input {
+			font-size: 12px;
+			font-weight: bold;
+		}
+		#searchfield button {
+			border: 0;
+			background-color: transparent;
+		}
+		#searchfield input {
+			font-size: 8pt;
+			top: 8px;
+			right: 38px;
+			border: 1px solid black;
+			position: absolute;
+		}
+		
+		#fileuploader button img {
+			vertical-align: -8px;
+		}
+		textarea {
+			resize: none;
+		}
+	</style>
+	<head>
+		<title>Library.js</title>
+		<link rel="shortcut icon" href="favicon.ico" />
+	</head>
+	<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+	<script type="text/javascript" src="plupload.full.js"></script>
+
+	<script type="text/javascript">
+		
+		var realObject;
+		var realHeader;
+		function expand(id, what) {
+			$("#" + id ).toggle();
+			describe(what);
+		}
+		
+		var regex = regex = /<a.+onclick="describe\(\'(.+?)\'\)"(.+?)a>/;
+
+		function deleteFile() {
+			var filename = $("#oldfilename").val();
+			$.ajax({
+				url: "Files/" + filename,
+				type: "DELETE",
+				success: function(data) {
+					file(filename);
+				}
+			});
+		}
+		
+		function renameFile() {
+			var filename = $("#oldfilename").val();
+			var n = $("#newfilename").val();
+			$.post("Files/" + filename, { "newfilename" : n },
+				function(data) {
+					file(newFilename);
+				}
+			);
+		}
+		
+	
+		function file(fileName) {
+			$.ajax({
+				url: "Files/" + fileName,
+				type: "GET",
+				success: function(data) {
+					data = JSON.parse(data);
+					$("#content").empty();
+					$("#content").append("<h1>" + data["filename"] + "</h1>");
+					$("#content").append("<img src=\"" + data["path"] + "\" /><br />");
+					$("#content").append("<span>Linktext : " + data["link"] + "</span><br />");
+					$("#content").append("<input id=\"oldfilename\" type=\"hidden\" value=\"" + data["filename"] + "\" /><input id=\"newfilename\" value=\"" + data["filename"] + "\"> <button onclick=\"renameFile()\">Umbenennen</button><br />");
+					$("#content").append("<button onclick=\"deleteFile()\">Löschen</button><br />");
+					
+				}
+			});
+		}
+		
+		function add() {
+			if ( $(".editableHeader").length > 0 ) {
+				$("#edit").removeAttr("disabled");
+				$("#edit img").attr("src", "icons/edit.png");
+				title = $(".editableHeader input").val();
+				text = $(".editableContent textarea").val();
+				meta = $(".editableMeta input").val();
+				$.post("Topics", {newFile : title, content: text, "meta": meta}, function() {
+					$(".editableHeader").remove();
+					$(".editableContent").remove();
+					$(".editableMeta").remove();
+					$(".curtain").hide();
+					describe(title);
+					discover();
+				});
+			} else {
+				$("#edit").attr("disabled", "disabled");
+				$("#edit img").attr("src", "icons/edit_disabled.png");
+				
+				$("#delete").attr("disabled", "disabled");
+				$("#delete img").attr("src", "icons/delete_disabled.png");
+				var header = realHeader;
+				var text = realObject;
+				var rMeta = realMeta;
+				$("#content").empty();
+				var div1 = $(document.createElement("div"));
+				var div2 = $(document.createElement("div"));
+				var div3 = $(document.createElement("div"));
+				div1.addClass("editableHeader");
+				div2.addClass("editableMeta");
+				div3.addClass("editableContent");
+				var input = $(document.createElement("input")).appendTo(div1);
+				var textarea = $(document.createElement("textarea")).appendTo(div3);
+				textarea.keypress( function(event) {
+					console.log(event);
+				});
+				var meta = $(document.createElement("input")).appendTo(div2);
+				meta.attr("placeholder", "Kategorien dieser Seite");
+				input.attr("placeholder", "Titel der Seite");
+				input.val();
+				textarea.val(); // need to be replaced
+				meta.val();
+				$("body").append(div1).append(div2).append(div3);
+				$(".curtain").show();
+			}
+			
+		}
+		
+		function del() {
+			if ( $(".editableHeader").length > 0 ) {
+				$.ajax({
+					type: 'DELETE',
+					url: 'Topics/' + realHeader,
+					async: false,
+				});
+				discover();
+				describe(realHeader);
+				$(".editableHeader").remove();
+				$(".editableContent").remove();
+				$(".editableMeta").remove();
+				$(".curtain").hide();
+						
+			}
+		}
+		
+		function edit() {
+			if ( $(".editableHeader").length > 0 ) {
+				// commencing save
+				title = $(".editableHeader input").val();
+				text = $(".editableContent textarea").val();
+				meta = $(".editableMeta input").val();
+				if ( title != realHeader ) {
+					//renamed file
+					$.ajax({
+						type: 'DELETE',
+						url: 'Topics/' + realHeader
+					});
+					$.post("Topics", {newFile : title, content: text, "meta": meta}, function() {
+						$(".editableHeader").remove();
+						$(".editableContent").remove();
+						$(".editableMeta").remove();
+						$(".curtain").hide();
+						describe(title);
+						discover();
+					});
+				} else {
+					$.post("Topics", {newFile : title, content: text, "meta": meta}, function() {
+						$(".editableHeader").remove();
+						$(".editableContent").remove();
+						$(".editableMeta").remove();
+						$(".curtain").hide();
+						describe(title);
+						discover();
+					});
+				}
+				$("#delete").attr("disabled", "disabled");
+				$("#delete img").attr("src", "icons/delete_disabled.png");
+				$("#add").removeAttr("disabled");
+				$("#add img").attr("src", "icons/add.png");
+					
+			} else {
+				$("#add").attr("disabled", "disabled");
+				$("#add img").attr("src", "icons/add_disabled.png");
+				$("#delete").removeAttr("disabled");
+				$("#delete img").attr("src", "icons/delete.png");
+				var header = realHeader;
+				var text = realObject;
+				var rMeta = realMeta;
+				$("#content").empty();
+				var div1 = $(document.createElement("div"));
+				var div2 = $(document.createElement("div"));
+				var div3 = $(document.createElement("div"));
+				div1.addClass("editableHeader");
+				div2.addClass("editableMeta");
+				div3.addClass("editableContent");
+				if ( $("#fileuploader:visible").length > 0 ) {
+					$(".editableContent").css("bottom", "138px !important");
+				}
+				var input = $(document.createElement("input")).appendTo(div1);
+				var textarea = $(document.createElement("textarea")).appendTo(div3).keypress( function(event) {
+					if ( typeof lastCharcode != "undefined" ) {
+						if ( lastCharcode == 91 && event.charCode == 91 ) {
+							// internal link perhapse?
+							console.log("display possible pages as list");
+							enableIntellisense = true;
+						}
+						
+					} else {
+						lastCharcode = event.charCode;
+					}
+					if ( enableIntellisense == true ) {
+					}
+				});
+				var meta = $(document.createElement("input")).appendTo(div2);
+				meta.attr("placeholder", "Kategorien dieser Seite");
+				input.attr("placeholder", "Titel der Seite");
+				input.val(header);
+				textarea.val(text); // need to be replaced
+				meta.val(rMeta);
+				$("body").append(div1).append(div2).append(div3);
+				$(".curtain").show();
+			}
+			
+		}
+		
+		function toggleToc() {
+			$(".toc").toggle();
+			if ( $(".toc:visible").length > 0 ) {
+				$("#showToc").attr("src", "icons/chevron_up.png");
+			} else {
+				$("#showToc").attr("src", "icons/chevron_down.png");
+			}
+		}
+		
+		function describe(what) {
+			var date = new Date();
+			$.ajax({
+				url: "Topics/" + what,
+				contentType: "application/json",
+				dataType: "json",
+				success: function(data) {
+						$("#content").empty();
+						var obj = data;
+						$("#content").append("<h1><img src='icons/chevron_down.png' id='showToc' onclick='toggleToc()' style='display: none' />" + what + "</h1>");
+						$("#content").append(obj["parsed"]);
+						console.log(obj["parsed"]);
+						realObject = obj["unparsed"];
+						realHeader = what;
+						realMeta = obj["meta"];
+						if ( $("#content .toc").length > 0 ) {
+							$(".toc a").bind("click", function() {
+								toggleToc();
+							});
+							$("#showToc").show();
+						} else {
+							$("#showToc").hide();
+						}
+					}
+			});
+		}
+		
+		function discover() {
+			$("#results").empty();
+			$.ajax({
+				url: "Topics",
+				contentType: "application/json",
+				dataType: "json",
+				success: function(data) {
+					structure = new Array();
+					obj = data;
+					var i = 0;
+					for ( row in obj ) {
+						if ( row != "Spezialseiten" ) {
+							var id = row;
+							do {
+								id = id.replace(" ", "");
+							} while ( id.indexOf(" ") != -1 );
+							$("#results").append("<span class=\"caption\"><a href=\"#\" onclick=\"expand('" + id + "', '" + row + "')\">" + row + "</a></span><br \>");
+							div = $(document.createElement("div"));
+							div.attr("id", id).addClass("accordion").hide();
+							for ( rowrow in obj[row] ) {
+								div.append("<span class=\"sub\"><a href=\"#\" onclick=\"describe('" + obj[row][rowrow] + "')\">" + obj[row][rowrow] + "</a></span><br />");
+							}
+							$("#results").append(div);
+						}
+					}
+				}
+			});
+		}
+		
+		function reload() {
+			discover();
+			describe(realHeader);
+			$(".curtain").hide();
+			$(".editableHeader").remove();
+			$(".editableContent").remove();
+			$(".editableMeta").remove();
+			$("#delete").attr("disabled", "disabled");
+			$("#delete img").attr("src", "icons/delete_disabled.png");
+			$("#add").removeAttr("disabled");
+			$("#add img").attr("src", "icons/add.png");
+			$("#edit").removeAttr("disabled");
+			$("#edit img").attr("src", "icons/edit.png");
+					
+		}
+		
+		$("body").ready(function() {
+			discover();
+			describe("Startseite");
+					$("#searchbox").keypress( function(event) {
+				search();
+		});	
+		});
+		
+		$(function() {
+			var uploader = new plupload.Uploader({
+				runtimes : 'gears,html5,flash,silverlight,browserplus',
+				browse_button : 'pickfiles',
+				container : 'file',
+				max_file_size : '10mb',
+				url : 'Files',
+				flash_swf_url : '/plupload/js/plupload.flash.swf',
+				silverlight_xap_url : '/plupload/js/plupload.silverlight.xap',
+				filters : [
+					{title : "Image files", extensions : "jpg,gif,png"},
+					{title : "Zip files", extensions : "zip"}
+				],
+				init : {
+					FileUploaded: function(up, file, info) {
+						$("#filelist").html("Dateilink: <input value=\"{{" + file.name + "}}\"/><br />");
+						if ( $("#imageedit").length > 0 ) {
+							$("#imageedit").attr("onclick", "file('" + file.name + "')");
+						} else {
+							$("#buttonrow").append("<button id=\"imageedit\" onclick=\"file('" + file.name + "')\">Bearbeiten<img src=\"icons/imageedit.png\"/></button>");
+						}
+					}
+				}
+			});
+
+			uploader.bind('Init', function(up, params) {
+			});
+
+			$('#uploadfiles').click(function(e) {
+				uploader.start();
+				e.preventDefault();
+			});
+
+			uploader.init();
+
+			uploader.bind('FilesAdded', function(up, files) {
+				$.each(files, function(i, file) {
+					$('#filelist').append(
+						'<div id="' + file.id + '">' +
+						file.name + ' (' + plupload.formatSize(file.size) + ') <b></b>' +
+					'</div>');
+				});
+
+				up.refresh(); // Reposition Flash/Silverlight
+			});
+
+			uploader.bind('UploadProgress', function(up, file) {
+				$('#' + file.id + " b").html(file.percent + "%");
+			});
+
+			uploader.bind('Error', function(up, err) {
+				$('#filelist').append("<div>Error: " + err.code +
+					", Message: " + err.message +
+					(err.file ? ", File: " + err.file.name : "") +
+					"</div>"
+				);
+
+				up.refresh(); // Reposition Flash/Silverlight
+			});
+
+			uploader.bind('FileUploaded', function(up, file) {
+				$('#' + file.id + " b").html("100%");
+			});
+		});
+		
+		function upload() {
+			$("#content").toggleClass("fileuploader");
+			$("#fileuploader").toggle();
+			if ( $(".editableContent").length > 0 )
+				if ( $("#fileuploader:visible").length > 0 ) {
+					$(".editableContent").addClass("fileuploader");
+					$(".editableContent").css("bottom", "138px !important"); 
+					$("#fileuploader").show();
+				} else {
+					$(".editableContent").removeClass("fileuploader");
+					$("#fileuploader").hide();
+				}
+		}
+		
+		function search() {
+			
+			var date = new Date();
+			$.get("Search/", {"q" : $("#searchbox").val() }, function(data) {
+				var diffDate = new Date();
+				var results = false;
+				$("#content").html("<h1>Suchergebnisse für `" + $("#searchbox").val() + "`</h1><span class=\"specs\">Verarbeitungszeit : " + 
+				(diffDate.getMilliseconds() - date.getMilliseconds()) + "ms</span>");
+				
+					results = true;
+					$("#content").append("<h3>Direkte Treffer</h3>");
+					
+					var ul = $(document.createElement("ul"));
+					obj = eval( '(' + data + ')' );
+					for ( row in obj["directmatch"] ) {
+						$(ul).append("<li><a href=\"#\" onclick=\"describe('" + obj["directmatch"][row] + "')\">" + obj["directmatch"][row] + "</a></li>");
+					}
+					$("#content").append(ul);
+				
+				if ( typeof obj["indirectmatch"][1] != "undefined" ) {
+					results = true;
+					$("#content").append("<h3>Volltextsuche</h3>");
+					ul = $(document.createElement("ul"));
+					for ( row in obj["indirectmatch"] ) {
+						$(ul).append("<li><a href=\"#\" onclick=\"describe('" + obj["indirectmatch"][row] + "')\">" + obj["indirectmatch"][row] + "</a></li>");
+					}
+					$("#content").append(ul);
+				}
+				if ( results == false ) {
+					$("#content").append("<h3>Keine Treffer</h3><ul><li>Es wurden keine Einträge gefunden.</li></ul>");
+				}
+			});
+		}
+	</script>
+	<link rel="StyleSheet" href="fileuploader.css" type="text/css" />
+	<body>
+		<a href="#" onclick="describe('Startseite')"><h1>Library</h1></a>
+		<div id="searchfield">
+		<input id="searchbox" type="text" placeholder="Search"/><button onclick="search()"><img src="icons/search.png"/></button>
+		</div>
+		<div id="results"></div>
+		<div class="curtain" style="display: none"></div>
+		<div id="commandbar">
+			<button id="add" onclick="add()"><img src="icons/add.png"/></button><button id="edit" onclick="edit()"><img src="icons/edit.png"/></button><button id="delete" onclick="del()" disabled><img src="icons/delete_disabled.png"/></button><button onclick="upload()"><img src="icons/upload.png"/></button><button onclick="reload()"><img src="icons/refresh.png"/></button>
+		</div>
+		<div id="content"></div>
+		<div id="fileuploader" style="display: none">
+			<h2>Dateiupload</h2>
+			<div id="file">
+			<div id="buttonrow">
+				<button id="pickfiles" href="#">Dateien Suchen<img src="icons/filesearch.png"/></button> 
+				<button id="uploadfiles" href="#">Hochladen<img src="icons/fileupload.png"/></Button>
+			</div>
+			</div>
+			<div id="filelist"></div>  
+			
+		</div>
+	</body>
+</html>
