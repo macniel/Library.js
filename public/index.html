@@ -327,7 +327,7 @@ background: linear-gradient(top, #f3f3f3 1%,#e5e5e5 4%,#d2d2d2 98%,#bdbdbd 100%)
 					$("#content").append("<img src=\"" + data["path"] + "\" /><br />");
 					$("#content").append("<span>Linktext : " + data["link"] + "</span><br />");
 					$("#content").append("<input id=\"oldfilename\" type=\"hidden\" value=\"" + data["filename"] + "\" /><input id=\"newfilename\" value=\"" + data["filename"] + "\"> <button onclick=\"renameFile()\">Umbenennen</button><br />");
-					$("#content").append("<button onclick=\"deleteFile()\">Löschen</button><br />");
+					$("#content").append("<button onclick=\"deleteFile()\">LÃ¶schen</button><br />");
 					
 				}
 			});
@@ -496,6 +496,16 @@ background: linear-gradient(top, #f3f3f3 1%,#e5e5e5 4%,#d2d2d2 98%,#bdbdbd 100%)
 				success: function(data) {
 						$("#content").empty();
 						var obj = data;
+						var categories = data["meta"].split(",");
+						for ( category in categories ) {
+							console.log(categories[category] + " expand");
+							category = categories[category].replace(" ", "").replace(/%20/g, "");
+							console.log(category);
+							$("div[id='" + category + "']").show();
+						}
+						var pane = what.replace(/ /g, "").replace(/%20/g, "")
+						console.log(pane);
+						$("div[id='" + pane + "']").show();
 						$("#content").append("<h1><img src='icons/chevron_down.png' id='showToc' onclick='toggleToc()' style='display: none' />" + what + "</h1>");
 						$("#content").append(obj["parsed"]);
 						console.log(obj["parsed"]);
@@ -530,17 +540,29 @@ background: linear-gradient(top, #f3f3f3 1%,#e5e5e5 4%,#d2d2d2 98%,#bdbdbd 100%)
 							do {
 								id = id.replace(" ", "");
 							} while ( id.indexOf(" ") != -1 );
-							$("#results").append("<span class=\"caption\"><a href=\"#\" onclick=\"expand('" + id + "', '" + row + "')\">" + row + "</a></span><br \>");
+							$("#results").append("<span class=\"caption\"><a href=\"?topic=" + row + "\">" + row + "</a></span><br \>");
 							div = $(document.createElement("div"));
 							div.attr("id", id).addClass("accordion").hide();
 							for ( rowrow in obj[row] ) {
-								div.append("<span class=\"sub\"><a href=\"#\" onclick=\"describe('" + obj[row][rowrow] + "')\">" + obj[row][rowrow] + "</a></span><br />");
+								div.append("<span class=\"sub\"><a href=\"?topic=" + obj[row][rowrow] + "\">" + obj[row][rowrow] + "</a></span><br />");
 							}
 							$("#results").append(div);
 						}
 					}
 				}
 			});
+		}
+		
+		function getUrlVars() {
+			var vars = [], hash;
+			var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+			for(var i = 0; i < hashes.length; i++)
+			{
+				hash = hashes[i].split('=');
+				vars.push(hash[0]);
+				vars[hash[0]] = hash[1];
+			}
+			return vars;
 		}
 		
 		function reload() {
@@ -561,8 +583,13 @@ background: linear-gradient(top, #f3f3f3 1%,#e5e5e5 4%,#d2d2d2 98%,#bdbdbd 100%)
 		
 		$("body").ready(function() {
 			discover();
-			describe("Startseite");
-					$("#searchbox").keypress( function(event) {
+			var vars = getUrlVars();
+			if ( typeof vars["topic"] != "undefined" ) {
+				describe(vars["topic"].replace(/#.+?$/, "").replace(/%20/g, " "));
+			} else {
+				describe("Startseite");
+			}
+			$("#searchbox").keypress( function(event) {
 				search();
 		});	
 		});
@@ -652,7 +679,7 @@ background: linear-gradient(top, #f3f3f3 1%,#e5e5e5 4%,#d2d2d2 98%,#bdbdbd 100%)
 			$.get("Search/", {"q" : $("#searchbox").val() }, function(data) {
 				var diffDate = new Date();
 				var results = false;
-				$("#content").html("<h1>Suchergebnisse für `" + $("#searchbox").val() + "`</h1><span class=\"specs\">Verarbeitungszeit : " + 
+				$("#content").html("<h1>Suchergebnisse fÃ¼r `" + $("#searchbox").val() + "`</h1><span class=\"specs\">Verarbeitungszeit : " + 
 				(diffDate.getMilliseconds() - date.getMilliseconds()) + "ms</span>");
 				
 					results = true;
@@ -675,7 +702,7 @@ background: linear-gradient(top, #f3f3f3 1%,#e5e5e5 4%,#d2d2d2 98%,#bdbdbd 100%)
 					$("#content").append(ul);
 				}
 				if ( results == false ) {
-					$("#content").append("<h3>Keine Treffer</h3><ul><li>Es wurden keine Einträge gefunden.</li></ul>");
+					$("#content").append("<h3>Keine Treffer</h3><ul><li>Es wurden keine EintrÃ¤ge gefunden.</li></ul>");
 				}
 			});
 		}
